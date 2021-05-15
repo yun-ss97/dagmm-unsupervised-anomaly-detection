@@ -32,3 +32,6 @@ RUN analyze.ipynb
 | **lambda_energy** | 0.1 |
 | **lambda_cov** | 0.005 |
 | **number of gaussian components** | 5 |
+
+
+Reference: [[code]](https://github.com/lixiangwang/DAGMM-pytorch)
