@@ -1,1 +1,1 @@
-# yun-ss97-dagmm-unsupervised-anomaly-detection
+# dagmm-unsupervised-anomaly-detection
