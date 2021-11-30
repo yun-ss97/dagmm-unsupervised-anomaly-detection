@@ -1,25 +1,25 @@
 ## Deep Autoencoding Gaussian Mixture Model for Unsupervised Anomaly Detection (DAGMM)
 
-## About DAGMM model
+### About DAGMM model
 [[Paper](https://bzong.github.io/doc/iclr18-dagmm.pdf)] Deep Autoencoding Gaussian Mixture Model for Unsupervised Anomaly Detection (ICLR,2018)
 
 
 [[Youtube Review](https://youtu.be/byvMpGsl7cE)] 발표자: DSBA연구실 이윤승 석사과정(https://github.com/yun-ss97)
 
 
-## How to train and evaluate
-### Train 
+### How to train and evaluate
+#### Train 
 ```python
 python main.py --mode 'train' --data_root {root path} --data_name {data name}
 ```
 
 
-### Test (All) 
+#### Test (All) 
 ```python
 python main.py --mode 'test_all' --data_root {data root path} --data_name {data name}
 ```
 
-### Result Analysis
+#### Result Analysis
 ```python
 RUN analyze.ipynb
 ```
