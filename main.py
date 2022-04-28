@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('--img_dir', type=str, default='./result/')
     parser.add_argument('--ratio', type=float, default=0.8)
     parser.add_argument('--data_root', type=str, default='/mnt/C83AFA0C3AF9F6F2/21_hanwha_1/DC101_preprocessed_sample')
-    parser.add_argument('--data_name', type=str, default='20180125_20180125.p')
+    parser.add_argument('--data_name', type=str, default='20220101_20220320.p')
     parser.add_argument('--time_phase', type=bool, default=False)
 
     parser.add_argument('--mode', type=str, choices=['train', 'test', 'plot_result'])
