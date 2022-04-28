@@ -25,32 +25,6 @@ def load_model(args):
     
     return model
 
-# def compute_threshold(model, train_loader,len_data):
-#     energies = np.zeros(shape=(len_data))
-#     step = 0
-#     energy_interval = 50
-
-#     with torch.no_grad():
-#         model.eval()
-
-#         for x in train_loader:
-#             enc,dec,z,gamma = model(x)
-#             m_prob, m_mean, m_cov = model.get_gmm_param(gamma, z)
-            
-#             for i in range(z.shape[0]):
-#                 zi = z[i].unsqueeze(1)
-#                 sample_energy = model.sample_energy(m_prob, m_mean, m_cov, zi,gamma.shape[1], gamma.shape[0])
-
-#                 energies[step] = sample_energy.detach().item()
-#                 step += 1
-
-#             if step % energy_interval == 0:
-#                 print('Iteration: %d    sample energy: %.4f' % (step, sample_energy))
-    
-#     threshold = np.percentile(energies, 80)
-#     print('threshold: %.4f' %(threshold))
-    
-#     return threshold
 
 def test(args, train_loader, scaler):
     model = load_model(args)
@@ -69,26 +43,35 @@ def test(args, train_loader, scaler):
 
 
     energy_list = []
-    x_list = []
-    dec_list = []
+    sum_prob, sum_mean, sum_cov = 0,0,0
+    data_size = 0
 
     with torch.no_grad():
 
         for input_data in train_loader:
 
-            enc,dec,z,gamma = model(input_data)
+            _ ,_, z, gamma = model(input_data)
             m_prob, m_mean, m_cov = model.get_gmm_param(gamma, z)
-            input_data,dec,z,gamma = input_data.cpu(),dec.cpu(),z.cpu(),gamma.cpu()
+
+            sum_prob += m_prob
+            sum_mean += m_mean * m_prob
+            sum_cov += m_cov * m_prob
+            
+            data_size += input_data.shape[0]
+        
+        train_prob = sum_prob / data_size
+        train_mean = sum_mean / sum_prob
+        train_cov = sum_cov / sum_prob
 
 
-        for x in dataloader:
-            enc,dec,z,gamma = model(x)
+        for _ ,x in enumerate(dataloader):
+
+            _ ,_ ,z,gamma = model(x)
             
             for i in range(z.shape[0]):
                 zi = z[i].unsqueeze(1)
-                sample_energy = model.sample_energy(m_prob, m_mean, m_cov, zi,gamma.shape[1],gamma.shape[0])
+                sample_energy = model.sample_energy(train_prob, train_mean, train_cov, zi, gamma.shape[1],gamma.shape[0])
                 se = sample_energy.detach().item()
-
                 energy_list.append(se)
 
     energy_list = pd.DataFrame(energy_list)
